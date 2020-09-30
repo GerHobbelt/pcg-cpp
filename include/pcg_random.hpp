@@ -353,6 +353,11 @@ protected:
     }
 };
 
+template<typename itype>
+struct RngState
+{
+    itype state;
+};
 
 /*
  * This is where it all comes together.  This function joins together three
@@ -523,6 +528,17 @@ public:
         // Nothing else to do.
     }
 
+    void serialize_to_struct(RngState<itype> *state_struct)
+    {
+        static_assert(sizeof(RngState<itype>) == sizeof(state_));
+        std::memcpy(state_struct, &state_, sizeof(state_));
+    }
+
+    void deserialize_from_struct(RngState<itype> *state_struct)
+    {
+        static_assert(sizeof(RngState<itype>) == sizeof(state_));
+        std::memcpy(&state_, state_struct, sizeof(state_));
+    }
 
     template<typename... Args>
     void seed(Args&&... args)
