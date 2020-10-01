@@ -353,11 +353,6 @@ protected:
     }
 };
 
-template<typename itype>
-struct RngState
-{
-    itype state;
-};
 
 /*
  * This is where it all comes together.  This function joins together three
@@ -528,15 +523,17 @@ public:
         // Nothing else to do.
     }
 
-    void serialize_to_struct(RngState<itype> *state_struct)
+    void serializeToStruct(itype *state_struct)
     {
-        static_assert(sizeof(RngState<itype>) == sizeof(state_));
+        static_assert(sizeof(itype) == sizeof(state_));
         std::memcpy(state_struct, &state_, sizeof(state_));
     }
 
-    void deserialize_from_struct(RngState<itype> *state_struct)
+    void deserializeFromStruct(itype *state_struct)
     {
-        static_assert(sizeof(RngState<itype>) == sizeof(state_));
+        // We /assume/ that the user has checked that the rng type
+        //  and stream are the same.
+        static_assert(sizeof(itype) == sizeof(state_));
         std::memcpy(&state_, state_struct, sizeof(state_));
     }
 
