@@ -385,7 +385,12 @@ public:
         return Integral(d.v01);
     }
 
-    explicit constexpr operator bool() const
+	UIntX2 to_uint() const
+	{
+		return d.v01;
+	}
+
+	explicit constexpr operator bool() const
     {
         return d.v01 || d.v23;
     }
