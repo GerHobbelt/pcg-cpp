@@ -298,7 +298,7 @@ inline itype rotl(itype value, bitcount_t rot)
 }
 
 template <typename itype>
-inline itype rotr(itype value, bitcount_t rot)
+constexpr inline itype rotr(itype value, bitcount_t rot)
 {
     constexpr bitcount_t bits = sizeof(itype) * 8;
     constexpr bitcount_t mask = bits - 1;
