@@ -1,3 +1,7 @@
+// exec as:
+//
+//        for f in *.cpp ; do g=$( echo $f | sed 's/[.]cpp//' ) ; echo $g ; node ./patch.js $g $f ; done
+//
 
 let fs = require("fs")
 let path = require("path")
@@ -22,5 +26,6 @@ src = src
 
 console.log(src);
 
+fs.writeFileSync(fname, src, "utf8");
 
 
