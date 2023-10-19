@@ -29,15 +29,32 @@
  *      ./spew | hexdump -C | less
  */
 
+#if defined(_WIN32)
+#define _CRT_NONSTDC_NO_DEPRECATE
+#endif
 #include <cstdio>
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
 #include <random>
 
+#if defined(_WIN32)
+#include <windows.h>
+#include <io.h>
+
+#undef max
+#undef min
+#else
 #include <unistd.h>             // We use POSIX read/write for binary I/O
+#endif
 
 #include "pcg_random.hpp"
+#include "monolithic_examples.h"
+
+#if defined(BUILD_MONOLITHIC)
+#define main		pcgrnd_spew_sample_main
+#endif
+
 
 int main()
 {
@@ -51,7 +68,7 @@ int main()
     for (size_t i = 0; i < ROUNDS; ++i) {
         for (auto& v : buffer)
             v = rng();
-        write(1, (void*) buffer, sizeof(buffer));
+        write(fileno(stdout), (void*) buffer, sizeof(buffer));
     }
     return 0;
 }

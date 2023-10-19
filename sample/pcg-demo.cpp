@@ -36,6 +36,12 @@
 #include <random>       // for random_device
 
 #include "pcg_random.hpp"
+#include "monolithic_examples.h"
+
+#if defined(BUILD_MONOLITHIC)
+#define main		pcgrnd_demo_main
+#endif
+
 
 // This code can be compiled with the preprocessor symbol RNG set to the
 // PCG generator you'd like to test.

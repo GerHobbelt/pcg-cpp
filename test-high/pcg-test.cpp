@@ -45,6 +45,21 @@
     #define TWO_ARG_INIT 1
 #endif
 
+#ifndef RNGNAME 
+#define RNGNAME pcg_test_main
+#endif
+
+#if !defined(PCG_EMULATED_128BIT_MATH)
+#define PCG_EMULATED_128BIT_MATH 0
+#endif
+#if !defined(AWKWARD_128BIT_CODE)
+#define AWKWARD_128BIT_CODE 0
+#endif
+
+
+#include "../sample/monolithic_examples.h"
+
+
 #define STRINGIFY_IMPL(x) #x
 #define STRINGIFY(x)      STRINGIFY_IMPL(x)
 
@@ -53,7 +68,7 @@ using pcg_extras::operator<<;
 
 #if !PCG_EMULATED_128BIT_MATH || !AWKWARD_128BIT_CODE
 
-int main(int argc, char** argv)
+int pcg_main_func(RNGNAME) (int argc, const char** argv)
 {
     // Read command-line options
 
@@ -178,6 +193,7 @@ int main()
     // constexpr or some things not to be declared const.
     cout << "Sorry, " STRINGIFY(RNG) " not supported with emulated 128-bit math"
          << endl;
+	return 0;
 }
 
 #endif

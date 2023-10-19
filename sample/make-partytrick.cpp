@@ -32,20 +32,25 @@
 #include <random>
 
 #include "pcg_random.hpp"
+#include "monolithic_examples.h"
+
+#if defined(BUILD_MONOLITHIC)
+#define main		pcgrnd_make_partytrick_sample_main
+#endif
 
 /* 256 bytes of "non-random" data we want to place in the output sequence
  * of our 64-dimensionally equidistributed 32-bit (4 byte) integers
  * (64 * 4 = 256).
  */
 
-char desired[] = "LalalalaMEEPMEEPMEEPLOOKRandomChanceThatAWasWordUnlikely things happen, right?This generator has period 2^2112, it contains many valid English sentences, including this one. It'll be a *long* time before you see another one though. Good luck. Back to work!";
+static char desired[] = "LalalalaMEEPMEEPMEEPLOOKRandomChanceThatAWasWordUnlikely things happen, right?This generator has period 2^2112, it contains many valid English sentences, including this one. It'll be a *long* time before you see another one though. Good luck. Back to work!";
 
 /* Rather than put our 256 bytes in one block, we will scatter it around.
  * This table shows the offset of one byte to the next, in 256-byte (i.e., 
  * 64-tuple) increments.  '0' -> 0, '1' -> 1, '/' -> -1, '.' -> -2
  */
  
-char breaks[] = "00/020.040001000/000200010000010000020001.0020003000000000000000000000000000007000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+static char breaks[] = "00/020.040001000/000200010000010000020001.0020003000000000000000000000000000007000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 
 int main()
 {

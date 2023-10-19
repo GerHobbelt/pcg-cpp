@@ -41,7 +41,12 @@
 #include <cmath>
 
 #include "pcg_random.hpp"
- 
+#include "monolithic_examples.h"
+
+#if defined(BUILD_MONOLITHIC)
+#define main		pcgrnd_cppref_sample_main
+#endif
+
 int main()
 {
     // Seed with a real random value, if available
@@ -73,4 +78,5 @@ int main()
     }
     
     std::cout << "Required " << (rng - rng_checkpoint) << " random numbers.\n";
+	return 0;
 }

@@ -27,6 +27,11 @@
 #include <cstdio>
 #include <iostream>
 #include <random>
+#include "monolithic_examples.h"
+
+#if defined(BUILD_MONOLITHIC)
+#define main		pcgrnd_codebook_sample_main
+#endif
 
 int main()
 {
@@ -39,6 +44,7 @@ int main()
         }
         printf("\n");
     }
+	return 0;
 }
 
     
