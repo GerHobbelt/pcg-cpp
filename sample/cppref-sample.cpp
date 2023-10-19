@@ -27,9 +27,6 @@
  */
 
 /*
- */
- 
-/*
  * Produce a histogram of a normal distribution.
  */
 

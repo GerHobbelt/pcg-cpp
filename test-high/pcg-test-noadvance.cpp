@@ -175,7 +175,7 @@ int pcg_main_func(RNGNAME) (int argc, const char** argv)
 
 #else //  i.e. PCG_EMULATED_128BIT_MATH && AWKWARD_128BIT_CODE
 
-int main()
+int pcg_main_func(RNGNAME) (int argc, const char** argv)
 {
     // It's not that it *can't* be done, it just requires either C++14-style
     // constexpr or some things not to be declared const.
