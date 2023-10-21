@@ -529,6 +529,19 @@ public:
         seed(seeddata[1], seeddata[0]);
     }
 
+    void serializeToStruct(itype *state_struct)
+    {
+        static_assert(sizeof(itype) == sizeof(state_));
+        std::memcpy(state_struct, &state_, sizeof(state_));
+    }
+
+    void deserializeFromStruct(itype *state_struct)
+    {
+        // We /assume/ that the user has checked that the rng type
+        //  and stream are the same.
+        static_assert(sizeof(itype) == sizeof(state_));
+        std::memcpy(&state_, state_struct, sizeof(state_));
+    }
 
     template<typename... Args>
     constexpr void seed(Args&&... args)
