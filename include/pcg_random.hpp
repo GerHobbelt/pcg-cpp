@@ -80,13 +80,11 @@
 #include <cstring>
 #include <cassert>
 #include <limits>
-#include <iostream>
 #include <iterator>
 #include <type_traits>
 #include <utility>
-#include <locale>
-#include <new>
 #include <stdexcept>
+#include <memory>
 
 #ifdef _MSC_VER
     #pragma warning(disable:4146)
@@ -331,7 +329,7 @@ public:
          return inc_ >> 1;
     }
 
-    void set_stream(itype specific_seq)
+    constexpr void set_stream(itype specific_seq)
     {
          inc_ = (specific_seq << 1) | 1;
     }
@@ -410,17 +408,17 @@ public:
     }
 
 protected:
-    itype bump(itype state)
+    constexpr itype bump(itype state)
     {
         return state * multiplier() + increment();
     }
 
-    itype base_generate()
+    constexpr itype base_generate()
     {
         return state_ = bump(state_);
     }
 
-    itype base_generate0()
+    constexpr itype base_generate0()
     {
         itype old_state = state_;
         state_ = bump(state_);
@@ -428,7 +426,7 @@ protected:
     }
 
 public:
-    result_type operator()()
+    constexpr result_type operator()()
     {
         if (output_previous)
             return this->output(base_generate0());
@@ -436,7 +434,7 @@ public:
             return this->output(base_generate());
     }
 
-    result_type operator()(result_type upper_bound)
+    constexpr result_type operator()(result_type upper_bound)
     {
         return bounded_rand(*this, upper_bound);
     }
@@ -454,7 +452,7 @@ protected:
     }
 
 public:
-    void advance(itype delta)
+    constexpr void advance(itype delta)
     {
         state_ = advance(state_, delta, this->multiplier(), this->increment());
     }
@@ -464,7 +462,7 @@ public:
         advance(-delta);
     }
 
-    void discard(itype delta)
+    constexpr void discard(itype delta)
     {
         advance(delta);
     }
@@ -481,7 +479,7 @@ public:
         }
     }
 
-    engine(itype state = itype(0xcafef00dd15ea5e5ULL))
+    constexpr engine(itype state = itype(0xcafef00dd15ea5e5ULL))
         : state_(this->is_mcg ? state|state_type(3U)
                               : bump(state + this->increment()))
     {
@@ -525,9 +523,9 @@ public:
 
 
     template<typename... Args>
-    void seed(Args&&... args)
+    constexpr void seed(Args&&... args)
     {
-        new (this) engine(std::forward<Args>(args)...);
+        std::construct_at(this, std::forward<Args>(args)...);
     }
 
     template <typename xtype1, typename itype1,
@@ -810,7 +808,7 @@ using mcg_base = engine<xtype, itype,
 
 template <typename xtype, typename itype>
 struct xsh_rs_mixin {
-    static xtype output(itype internal)
+    constexpr static xtype output(itype internal)
     {
         constexpr bitcount_t bits        = bitcount_t(sizeof(itype) * 8);
         constexpr bitcount_t xtypebits   = bitcount_t(sizeof(xtype) * 8);
@@ -843,7 +841,7 @@ struct xsh_rs_mixin {
 
 template <typename xtype, typename itype>
 struct xsh_rr_mixin {
-    static xtype output(itype internal)
+    constexpr static xtype output(itype internal)
     {
         constexpr bitcount_t bits        = bitcount_t(sizeof(itype) * 8);
         constexpr bitcount_t xtypebits   = bitcount_t(sizeof(xtype)*8);
@@ -878,7 +876,7 @@ struct xsh_rr_mixin {
 
 template <typename xtype, typename itype>
 struct rxs_mixin {
-static xtype output_rxs(itype internal)
+constexpr static xtype output_rxs(itype internal)
     {
         constexpr bitcount_t bits        = bitcount_t(sizeof(itype) * 8);
         constexpr bitcount_t xtypebits   = bitcount_t(sizeof(xtype)*8);
@@ -944,7 +942,7 @@ PCG_DEFINE_CONSTANT(pcg128_t, mcg, unmultiplier,
 
 template <typename xtype, typename itype>
 struct rxs_m_xs_mixin {
-    static xtype output(itype internal)
+    constexpr static xtype output(itype internal)
     {
         constexpr bitcount_t xtypebits = bitcount_t(sizeof(xtype) * 8);
         constexpr bitcount_t bits = bitcount_t(sizeof(itype) * 8);
@@ -964,7 +962,7 @@ struct rxs_m_xs_mixin {
         return result;
     }
 
-    static itype unoutput(itype internal)
+    constexpr static itype unoutput(itype internal)
     {
         constexpr bitcount_t bits = bitcount_t(sizeof(itype) * 8);
         constexpr bitcount_t opbits = bits >= 128 ? 6
@@ -992,7 +990,7 @@ struct rxs_m_xs_mixin {
 
 template <typename xtype, typename itype>
 struct rxs_m_mixin {
-    static xtype output(itype internal)
+    constexpr static xtype output(itype internal)
     {
         constexpr bitcount_t xtypebits = bitcount_t(sizeof(xtype) * 8);
         constexpr bitcount_t bits = bitcount_t(sizeof(itype) * 8);
@@ -1030,7 +1028,7 @@ struct rxs_m_mixin {
 
 template <typename xtype, typename itype>
 struct dxsm_mixin {
-    inline xtype output(itype internal)
+    constexpr inline xtype output(itype internal)
     {
         constexpr bitcount_t xtypebits = bitcount_t(sizeof(xtype) * 8);
         constexpr bitcount_t itypebits = bitcount_t(sizeof(itype) * 8);
@@ -1058,7 +1056,7 @@ struct dxsm_mixin {
 
 template <typename xtype, typename itype>
 struct xsl_rr_mixin {
-    static xtype output(itype internal)
+    constexpr static xtype output(itype internal)
     {
         constexpr bitcount_t xtypebits = bitcount_t(sizeof(xtype) * 8);
         constexpr bitcount_t bits = bitcount_t(sizeof(itype) * 8);
@@ -1104,7 +1102,7 @@ template <typename xtype, typename itype>
 struct xsl_rr_rr_mixin {
     typedef typename halfsize_trait<itype>::type htype;
 
-    static itype output(itype internal)
+    constexpr static itype output(itype internal)
     {
         constexpr bitcount_t htypebits = bitcount_t(sizeof(htype) * 8);
         constexpr bitcount_t bits      = bitcount_t(sizeof(itype) * 8);
@@ -1144,7 +1142,7 @@ struct xsl_rr_rr_mixin {
 
 template <typename xtype, typename itype>
 struct xsh_mixin {
-    static xtype output(itype internal)
+    constexpr static xtype output(itype internal)
     {
         constexpr bitcount_t xtypebits = bitcount_t(sizeof(xtype) * 8);
         constexpr bitcount_t bits = bitcount_t(sizeof(itype) * 8);
@@ -1167,7 +1165,7 @@ struct xsh_mixin {
 
 template <typename xtype, typename itype>
 struct xsl_mixin {
-    inline xtype output(itype internal)
+    constexpr inline xtype output(itype internal)
     {
         constexpr bitcount_t xtypebits = bitcount_t(sizeof(xtype) * 8);
         constexpr bitcount_t bits = bitcount_t(sizeof(itype) * 8);

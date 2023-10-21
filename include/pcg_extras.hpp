@@ -39,10 +39,8 @@
 #include <cstring>
 #include <cassert>
 #include <limits>
-#include <iostream>
 #include <type_traits>
 #include <utility>
-#include <locale>
 #include <iterator>
 
 #ifdef __GNUC__
@@ -302,7 +300,7 @@ inline itype rotl(itype value, bitcount_t rot)
 }
 
 template <typename itype>
-inline itype rotr(itype value, bitcount_t rot)
+constexpr inline itype rotr(itype value, bitcount_t rot)
 {
     constexpr bitcount_t bits = sizeof(itype) * 8;
     constexpr bitcount_t mask = bits - 1;
@@ -628,6 +626,9 @@ private:
 public:
     static constexpr IntType value = fnv(IntType(2166136261U ^ sizeof(IntType)),
                         __DATE__ __TIME__ __FILE__);
+
+    //Prevent creation, while keeping GCC from giving a warning
+    static_arbitrary_seed() = delete;
 };
 
 // Sometimes, when debugging or testing, it's handy to be able print the name
