@@ -70,7 +70,7 @@ static const char* saved_state =
  "2676833081 98878999 999895120 425860638 4096143638 4063627507 2566817785";
 
 
-int main()
+int main(void)
 {
     pcg32_k64 rng;
     std::istringstream inbuf(saved_state);

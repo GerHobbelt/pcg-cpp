@@ -56,7 +56,7 @@
 #endif
 
 
-int main()
+int main(void)
 {
     pcg32_fast rng(pcg_extras::seed_seq_from<std::random_device>{});
     std::clog << rng << "\n\n";

@@ -33,7 +33,7 @@
 #define main		pcgrnd_codebook_sample_main
 #endif
 
-int main()
+int main(void)
 {
     pcg32 rng(pcg_extras::seed_seq_from<std::random_device>{});
     std::clog << "RNG used: " << rng << "\n\n";

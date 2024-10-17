@@ -44,7 +44,7 @@
 #define main		pcgrnd_cppref_sample_main
 #endif
 
-int main()
+int main(void)
 {
     // Seed with a real random value, if available
     pcg_extras::seed_seq_from<std::random_device> seed_source;

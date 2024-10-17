@@ -86,7 +86,7 @@ class ReversiblePCG : public EngineType {
   };
 };
 
-int main() {
+int main(void) {
   ReversiblePCG<pcg32> rng(pcg_extras::seed_seq_from<std::random_device>{});
 
   const int n = 8;
