@@ -46,7 +46,7 @@
  *            - equality and inequality for RNGs
  *      - and a number of convenience typedefs to mask all the complexity
  *
- * The code employees a fairly heavy level of abstraction, and has to deal
+ * The code employs a fairly heavy level of abstraction, and has to deal
  * with various C++ minutia.  If you're looking to learn about how the PCG
  * scheme works, you're probably best of starting with one of the other
  * codebases (see www.pcg-random.org).  But if you're curious about the
@@ -81,6 +81,7 @@
 #include <cassert>
 #include <limits>
 #include <iterator>
+#include <iosfwd>
 #include <type_traits>
 #include <utility>
 #include <stdexcept>
