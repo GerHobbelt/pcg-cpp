@@ -85,6 +85,7 @@
 #include <utility>
 #include <stdexcept>
 #include <memory>
+#include <ios>
 
 #ifdef _MSC_VER
     #pragma warning(disable:4146)
